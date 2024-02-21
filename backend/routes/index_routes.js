@@ -8,11 +8,21 @@ const {verificarCredenciales} = require ('../middleware/middleware.js')
 
 
 router.get('/usuarios', async (req, res) => {
+   
+
     try {
         const token = req.headers.authorization.split (" ")[1];
-        jwt.verify(token,process.env.SECRET)
-    
-        res.send("ruta con token")
+        let correoElectronico = "";
+        jwt.verify(token, process.env.SECRET, (err, decoded) => {
+            if (err) {
+                console.log('Error al decodificar el token:', err);
+                
+            } else {
+                 correoElectronico = decoded.email; 
+            }
+        });
+        const results = await getPosts(correoElectronico);
+        res.send(results)
         
     } catch (error) {
         res.status(500).json({
@@ -35,7 +45,9 @@ router.post('/login', async (req, res) => {
         await verificarCredenciales(email,password)
         const token = jwt.sign({email}, process.env.SECRET,{
             expiresIn: "1m" 
+        
         })
+       
 
         res.json({token})
         

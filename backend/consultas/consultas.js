@@ -2,8 +2,8 @@ const pool = require('../config/db')
 
 
 
-const getPosts = async () => {
-    const {rows} = await pool.query("select * from usuarios")
+const getPosts = async (email) => {
+    const {rows} = await pool.query("select * from usuarios where email = $1", [email])
     return rows
 }
 
