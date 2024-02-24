@@ -44,7 +44,7 @@ router.post('/login', async (req, res) => {
         const {email,password} = req.body
         await verificarCredenciales(email,password)
         const token = jwt.sign({email}, process.env.SECRET,{
-            expiresIn: "1m" 
+            expiresIn: "1h" 
         
         })
        

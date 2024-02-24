@@ -1,5 +1,8 @@
 const pool = require('../config/db')
 
+const bcrypt = require('bcrypt')
+
+
 
 
 const getPosts = async (email) => {
@@ -8,8 +11,10 @@ const getPosts = async (email) => {
 }
 
 const sendPosts = async (email,password,rol,lenguage) => {
+    const passwordEncrypt = await bcrypt.hash(password,10)
+    const clave = passwordEncrypt
     const {rows} = await pool.query("insert into usuarios(email,password,rol,lenguage) values ($1,$2,$3,$4)",
-    [email,password,rol,lenguage])
+    [email,clave,rol,lenguage])
     return rows
 }
 
