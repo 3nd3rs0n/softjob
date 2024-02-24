@@ -1,6 +1,6 @@
 const pool = require('../config/db')
 
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 
 
 
@@ -11,7 +11,8 @@ const getPosts = async (email) => {
 }
 
 const sendPosts = async (email,password,rol,lenguage) => {
-    const passwordEncrypt = await bcrypt.hash(password,10)
+    // verificar si hay que crear una variable let 
+    const passwordEncrypt =  bcrypt.hashSync(password)
     const clave = passwordEncrypt
     const {rows} = await pool.query("insert into usuarios(email,password,rol,lenguage) values ($1,$2,$3,$4)",
     [email,clave,rol,lenguage])
